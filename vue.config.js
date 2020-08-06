@@ -1,4 +1,3 @@
-'use strict'
 const path=require("path")
 
 function resolve(dir) {
@@ -10,8 +9,8 @@ module.exports = {
     assetsDir:"assets",
     outputDir:"dist",
     productionSourceMap: false,
-    devServer:{
-        
+    devServer: {
+        proxy:'http://222.186.36.75:9999/record-b'
     },
     configureWebpack: {
       resolve: {
