@@ -72,7 +72,7 @@
                             <!--                </div>-->
                         </div>
                         <div class="home-right-html" ref="html">
-                            <markdown-it-vue class="home-right-html-content" :content="content" :options="options" />
+                            <markdown-it-vue-light class="home-right-html-content" :content="content" :options="options" />
                         </div>
                     </div>
 
@@ -84,8 +84,12 @@
 </template>
 
 <script>
+    import MarkdownItVueLight from 'markdown-it-vue/dist/markdown-it-vue-light.umd.min.js'
     export default {
         name:'Home',
+        components: {
+            MarkdownItVueLight
+        },
         data() {
             return {
                 insertModel:true,//新增还是更新
@@ -257,6 +261,7 @@
 </script>
 
 <style scoped>
+    @import 'markdown-it-vue-light.css';
     .home-root{
         display: flex;
         flex-direction: column;
