@@ -3,7 +3,7 @@
         <el-dialog title="菜单" :visible.sync="dialogTableVisible">
             <div>
                 <div class="contextmenu-add" @click="prepareForAdd">新建</div>
-                <div class="contextmenu-delete">删除</div>
+                <div class="contextmenu-delete" @click="deleltBog">删除</div>
             </div>
         </el-dialog>
         <div class="home-top">
@@ -28,7 +28,7 @@
                 </el-submenu>
                 <el-menu-item index="3" disabled style="flex: 1"></el-menu-item>
                 <div class="home-top-save">
-                    <el-button class="home-top-save-btn" type="primary" size="medium" @click="insert">保存</el-button>
+                    <el-button class="home-top-save-btn" type="primary" size="medium" @click="insert">{{getOperateStr}}</el-button>
                 </div>
             </el-menu>
         </div>
@@ -88,6 +88,7 @@
         name:'Home',
         data() {
             return {
+                insertModel:true,//新增还是更新
                 editableTabsValue: '2',
                 tabList:[],
                 dialogTableVisible:false,
@@ -134,11 +135,24 @@
                 this.dialogTableVisible = true
             },
             prepareForAdd(){
+                this.insertModel = true
                 this.dialogTableVisible = false
                 this.tabList.push({id:new Date().getTime(),title:'新建'})
                 this.content = ''
             },
+            deleltBog(){
+                this.$axios.post('/blog/deleteByPrimaryKey',this.currentNode).then(res=>{
+                    alert(res)
+                    this.dialogTableVisible = false
+                }).catch(e=>{
+                    alert(e)
+                    this.dialogTableVisible = false
+                })
+            },
             tabClick(tab){
+                if(tab.name!='新增'){
+                    this.insertModel = false
+                }
                 this.content = this.getTabData(tab.name).markdown
             },
             getTabData(name){
@@ -148,22 +162,41 @@
                     }
                 }
             },
+            //保存
             insert(){
-                this.$axios.post('/blog/insert',{
-                    parentid:this.currentNode==null?0:this.currentNode.id,
-                    title:this.getFirstLineStr(this.content),
-                    html:this.$refs.html.outerHTML,
-                    markdown:this.content,
-                    ctime:new Date().getTime(),
-                    utime:new Date().getTime(),
-                    type:0
-                }).then(res=>{
-                    alert(res)
-                    this.currentNode=null
-                }).catch(e=>{
-                    alert(e)
-                })
-
+                if(this.insertModel){
+                    this.$axios.post('/blog/insert',{
+                        parentid:this.currentNode==null?0:this.currentNode.id,
+                        title:this.getFirstLineStr(this.content),
+                        html:this.$refs.html.outerHTML,
+                        markdown:this.content,
+                        ctime:new Date().getTime(),
+                        utime:new Date().getTime(),
+                        type:0
+                    }).then(res=>{
+                        alert(res)
+                    }).catch(e=>{
+                        alert(e)
+                    })
+                }else{
+                    if(this.currentNode==null){
+                        return
+                    }
+                    this.$axios.post('/blog/updateByPrimaryKey',{
+                        id:this.currentNode.id,
+                        parentid:this.currentNode.parentid,
+                        title:this.getFirstLineStr(this.content),
+                        html:this.$refs.html.outerHTML,
+                        markdown:this.content,
+                        ctime:new Date().getTime(),
+                        utime:new Date().getTime(),
+                        type:0
+                    }).then(res=>{
+                        alert(res)
+                    }).catch(e=>{
+                        alert(e)
+                    })
+                }
             },
             getFirstLineStr(str){
                 return str.substring(0,str.indexOf('\n'))
@@ -171,6 +204,7 @@
             // eslint-disable-next-line no-unused-vars
             handleNodeClick(object,node,self){
                 this.currentNode = object
+                this.insertModel = false
                 this.$axios.get('/blog/selectByParentId',{params:{id:object.id}}).then(res=>{
                     this.$refs.tree.updateKeyChildren(object.id,res.data)
                     this.content = object.markdown
@@ -213,6 +247,11 @@
         },
         mounted() {
             this.getchildData(0)
+        },
+        computed:{
+            getOperateStr(){
+                return this.insertModel ?"新增":"更新"
+            }
         }
     };
 </script>
