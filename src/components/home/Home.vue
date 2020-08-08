@@ -2,8 +2,9 @@
     <div class="home-root">
         <el-dialog title="菜单" :visible.sync="dialogTableVisible">
             <div>
-                <div class="contextmenu-add" @click="prepareForAdd">新建</div>
-                <div class="contextmenu-delete" @click="deleltBog">删除</div>
+                <div class="contextmenu-root-add contextmenu-item hand" @click="prepareForAdd(true)">新增根目录</div>
+                <div class="contextmenu-add  contextmenu-item hand" @click="prepareForAdd(false)">新建</div>
+                <div class="contextmenu-delete  contextmenu-item hand" @click="deleltBog">删除</div>
             </div>
         </el-dialog>
         <div class="home-top">
@@ -136,7 +137,10 @@
                 this.currentNode = object
                 this.dialogTableVisible = true
             },
-            prepareForAdd(){
+            prepareForAdd(root){
+                if(root){
+                    this.currentNode = null
+                }
                 this.insertModel = true
                 this.dialogTableVisible = false
                 this.tabList.push({id:new Date().getTime(),title:'新建'})
@@ -144,11 +148,11 @@
             },
             deleltBog(){
                 this.$axios.post('/blog/deleteByPrimaryKey',this.currentNode).then(res=>{
-                    alert(res)
                     this.dialogTableVisible = false
+                    alert(res.data==1?true:false)
                 }).catch(e=>{
-                    alert(e)
                     this.dialogTableVisible = false
+                    alert(e)
                 })
             },
             tabClick(tab){
@@ -176,7 +180,7 @@
                         utime:new Date().getTime(),
                         type:0
                     }).then(res=>{
-                        alert(res)
+                        alert(res.data==1?true:false)
                     }).catch(e=>{
                         alert(e)
                     })
@@ -194,14 +198,18 @@
                         utime:new Date().getTime(),
                         type:0
                     }).then(res=>{
-                        alert(res)
+                        alert(res.data==1?true:false)
                     }).catch(e=>{
                         alert(e)
                     })
                 }
             },
             getFirstLineStr(str){
-                return str.substring(0,str.indexOf('\n'))
+                let title =  str.indexOf('\n')==-1?str:str.substring(0,str.indexOf('\n'))
+                if(title.indexOf("# ")!=-1){
+                    title = title.substring(2,title.length)
+                }
+                return title.trim()
             },
             // eslint-disable-next-line no-unused-vars
             handleNodeClick(object,node,self){
@@ -259,6 +267,9 @@
 </script>
 
 <style scoped>
+    .hand{
+        cursor: pointer;
+    }
     .home-root{
         display: flex;
         flex-direction: column;
@@ -283,6 +294,9 @@
     .home-left{
         background: #545C64;
         width: 200px;
+    }
+    .contextmenu-item{
+        padding: 10px;
     }
     .home-left-tree{
     }
@@ -310,6 +324,7 @@
     .home-right-html-content{
         height: 100%;
         overflow-y: scroll;
+        text-align: left;
     }
     .home-right-markdown-input{
         height: 100%;
