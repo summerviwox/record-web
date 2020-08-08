@@ -53,7 +53,7 @@
                                     v-for="(item) in tabList"
                                     :key="item.id"
                                     :label="item.title"
-                                    :name="item.id"
+                                    :name="item.id.toString()"
                             >
                             </el-tab-pane>
                         </el-tabs>
@@ -72,7 +72,7 @@
                             <!--                </div>-->
                         </div>
                         <div class="home-right-html" ref="html">
-                            <markdown-it-vue-light class="home-right-html-content" :content="content" :options="options" />
+                            <markdown-it-vue class="home-right-html-content" :content="content" :options="options" />
                         </div>
                     </div>
 
@@ -84,11 +84,9 @@
 </template>
 
 <script>
-    import MarkdownItVueLight from 'markdown-it-vue/dist/markdown-it-vue-light.umd.min.js'
     export default {
         name:'Home',
         components: {
-            MarkdownItVueLight
         },
         data() {
             return {
@@ -154,10 +152,10 @@
                 })
             },
             tabClick(tab){
-                if(tab.name!='新增'){
+                if(Number(tab.name)!='新增'){
                     this.insertModel = false
                 }
-                this.content = this.getTabData(tab.name).markdown
+                this.content = this.getTabData(Number(tab.name)).markdown
             },
             getTabData(name){
                 for(let i=0;i<this.tabList.length;i++){
@@ -261,7 +259,6 @@
 </script>
 
 <style scoped>
-    @import 'markdown-it-vue-light.css';
     .home-root{
         display: flex;
         flex-direction: column;
@@ -345,4 +342,15 @@
         top: 0;
         left: 0;;
     }
+   .home-right-html-content  /deep/ .hljs{
+        background: black;
+       display: block;
+       text-align: left;
+       padding: 10px;
+       color: white;
+    }
+    .home-right-html-content  /deep/ .hljs-comment{
+        color: limegreen;
+    }
+
 </style>
