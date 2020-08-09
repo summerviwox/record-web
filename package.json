@@ -13,6 +13,7 @@
     "element-ui": "^2.13.2",
     "markdown-it": "^11.0.0",
     "markdown-it-vue": "^1.1.3",
+    "mavon-editor": "^2.9.0",
     "vue": "^2.6.11"
   },
   "devDependencies": {
