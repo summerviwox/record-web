@@ -357,14 +357,14 @@
         top: 0;
         left: 0;;
     }
-   .home-right-html-content  /deep/ .hljs{
+     /deep/ .hljs{
         background: black;
        display: block;
        text-align: left;
        padding: 10px;
        color: white;
     }
-    .home-right-html-content  /deep/ .hljs-comment{
+      /deep/ .hljs-comment{
         color: limegreen;
     }
 
