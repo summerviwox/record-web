@@ -9,9 +9,18 @@ module.exports = {
     assetsDir:"assets",
     outputDir:"dist",
     productionSourceMap: false,
-    devServer: {
-        proxy:'http://222.186.36.75:9999/record-b'
-    },
+    // devServer: {
+    //     proxy:{
+    //         '/api':{
+    //             target:'http://222.186.36.75:9999/record-b',
+    //             ws:true,
+    //             changeOrigin: true,
+    //             pathRewrite:{
+    //                 '^/api':''
+    //             }
+    //         }
+    //     }
+    // },
     configureWebpack: {
       resolve: {
         alias: {

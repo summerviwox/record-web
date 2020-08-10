@@ -61,19 +61,7 @@
                     </div>
                     <div class="home-right-bottom">
                         <div class="home-right-markdown">
-                        <textarea
-                                ref="input"
-                                class="home-right-markdown-input"
-                                type="textarea"
-                                placeholder="请输入内容"
-                                v-model="content">
-                        </textarea>
-                            <!--                <div contenteditable="true">-->
-                            <!--                    {{content}}-->
-                            <!--                </div>-->
-                        </div>
-                        <div class="home-right-html" ref="html">
-                            <markdown-it-vue class="home-right-html-content" :content="content" :options="options" />
+                            <mavon-editor v-model="content" class="home-right-markdown-input" ref="mavon"/>
                         </div>
                     </div>
 
@@ -91,6 +79,7 @@
         },
         data() {
             return {
+                http:"http://222.186.36.75:9999/record-b",
                 insertModel:true,//新增还是更新
                 editableTabsValue: '2',
                 tabList:[],
@@ -131,6 +120,9 @@
             }
         },
         methods: {
+            getHttp(){
+              return this.http
+            },
             //右键菜单
             // eslint-disable-next-line no-unused-vars
             nodeContextMenu(event,object,node,self){
@@ -147,7 +139,7 @@
                 this.content = ''
             },
             deleltBog(){
-                this.$axios.post('/blog/deleteByPrimaryKey',this.currentNode).then(res=>{
+                this.$axios.post(this.getHttp()+'/blog/deleteByPrimaryKey',this.currentNode).then(res=>{
                     this.dialogTableVisible = false
                     alert(res.data==1?true:false)
                 }).catch(e=>{
@@ -171,16 +163,16 @@
             //保存
             insert(){
                 if(this.insertModel){
-                    this.$axios.post('/blog/insert',{
+                    this.$axios.post(this.getHttp()+'/blog/insert',{
                         parentid:this.currentNode==null?0:this.currentNode.id,
                         title:this.getFirstLineStr(this.content),
-                        html:this.$refs.html.outerHTML,
+                        html:this.$refs.mavon.d_render,
                         markdown:this.content,
                         ctime:new Date().getTime(),
                         utime:new Date().getTime(),
                         type:0
                     }).then(res=>{
-                        alert(res.data==1?true:false)
+                        this.$message(res.data==1?"新增成功":"新增失败"+res.data)
                     }).catch(e=>{
                         alert(e)
                     })
@@ -188,17 +180,18 @@
                     if(this.currentNode==null){
                         return
                     }
-                    this.$axios.post('/blog/updateByPrimaryKey',{
+                    this.$axios.post(this.getHttp()+'/blog/updateByPrimaryKey',{
                         id:this.currentNode.id,
                         parentid:this.currentNode.parentid,
                         title:this.getFirstLineStr(this.content),
-                        html:this.$refs.html.outerHTML,
+                        html:this.$refs.mavon.d_render,
                         markdown:this.content,
                         ctime:new Date().getTime(),
                         utime:new Date().getTime(),
                         type:0
                     }).then(res=>{
-                        alert(res.data==1?true:false)
+                        this.$message('这是一条消息提示');
+                        this.$message(res.data==1?"更新成功":"更新失败"+res.data)
                     }).catch(e=>{
                         alert(e)
                     })
@@ -215,7 +208,7 @@
             handleNodeClick(object,node,self){
                 this.currentNode = object
                 this.insertModel = false
-                this.$axios.get('/blog/selectByParentId',{params:{id:object.id}}).then(res=>{
+                this.$axios.get(this.getHttp()+'/blog/selectByParentId',{params:{id:object.id}}).then(res=>{
                     this.$refs.tree.updateKeyChildren(object.id,res.data)
                     this.content = object.markdown
                     this.pushTabList(object)
@@ -245,7 +238,7 @@
                 }
             },
             getchildData(i){
-                this.$axios.get('/blog/selectByParentId',{params:{id:i}}).then(res=>{
+                this.$axios.get(this.getHttp()+'/blog/selectByParentId',{params:{id:i}}).then(res=>{
                     this.data = res.data
                     for(let i=0;i<this.data.length;i++){
                         this.pushTabList(this.data[i])
@@ -299,6 +292,7 @@
         padding: 10px;
     }
     .home-left-tree{
+        width: 200px;
     }
     .home-right{
         flex: 1;
@@ -348,6 +342,11 @@
         background: white;
         position: relative;
     }
+
+    /deep/ .el-tree-node__content{
+        height: 40px;
+    }
+
     /deep/.is-current>.el-tree-node__content::before{
         content: "";
         position: absolute;
