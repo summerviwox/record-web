@@ -61,7 +61,7 @@
                     </div>
                     <div class="home-right-bottom">
                         <div class="home-right-markdown">
-                            <mavon-editor v-model="content" class="home-right-markdown-input" ref="mavon"/>
+                            <mavon-editor v-model="content" class="home-right-markdown-input" ref="mavon"  @imgAdd="$imgAdd"/>
                         </div>
                     </div>
 
@@ -208,7 +208,7 @@
             handleNodeClick(object,node,self){
                 this.currentNode = object
                 this.insertModel = false
-                this.$axios.get(this.getHttp()+'/blog/selectByParentId',{params:{id:object.id}}).then(res=>{
+                this.$axios.get(this.getHttp()+'/blog/selectWithOutHtmlDataByParentId',{params:{id:object.id}}).then(res=>{
                     this.$refs.tree.updateKeyChildren(object.id,res.data)
                     this.content = object.markdown
                     this.pushTabList(object)
@@ -238,13 +238,33 @@
                 }
             },
             getchildData(i){
-                this.$axios.get(this.getHttp()+'/blog/selectByParentId',{params:{id:i}}).then(res=>{
+                this.$axios.get(this.getHttp()+'/blog/selectWithOutHtmlDataByParentId',{params:{id:i}}).then(res=>{
                     this.data = res.data
                     for(let i=0;i<this.data.length;i++){
                         this.pushTabList(this.data[i])
                     }
                 }).catch(e=>{
                     alert(e)
+                })
+            },
+            // 绑定@imgAdd event
+            $imgAdd(pos, $file){
+                // 第一步.将图片上传到服务器.
+                var formdata = new FormData();
+                formdata.append('file', $file);
+                this.$axios({
+                    url: this.getHttp()+"/blog/upload",
+                    method: 'post',
+                    data: formdata,
+                    headers: { 'Content-Type': 'multipart/form-data' },
+                }).then((url) => {
+                    // 第二步.将返回的url替换到文本原位置![...](0) -> ![...](url)
+                    // $vm.$img2Url 详情见本页末尾
+                    if(url.data.data!=null){
+                        this.$refs.mavon.$img2Url(pos, url.data.data);
+                    }
+                }).catch(e=>{
+                    this.$message(e)
                 })
             }
         },
@@ -282,7 +302,7 @@
         flex-direction: row;
         flex: 1;
         height: 100%;
-        overflow-y: hidden;
+        overflow: hidden;
     }
     .home-left{
         background: #545C64;
@@ -357,6 +377,7 @@
         left: 0;;
     }
      /deep/ .hljs{
+         border-radius: 4px;
         background: black;
        display: block;
        text-align: left;
@@ -366,5 +387,15 @@
       /deep/ .hljs-comment{
         color: limegreen;
     }
+    /deep/ .v-note-panel{
+        /*display: flex;*/
+        /*flex-direction: row;*/
+    }
 
+    /deep/ .v-note-edit{
+        width: 10px;
+    }
+    /deep/ .v-note-show{
+        flex: 1;
+    }
 </style>
