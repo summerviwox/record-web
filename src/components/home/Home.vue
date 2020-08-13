@@ -37,15 +37,17 @@
         <div class="home-content">
             <div class="home-content-content">
                 <div class="home-left">
-                    <el-tree
-                            class="home-left-tree"
-                            @node-contextmenu="nodeContextMenu"
-                            :highlight-current="true"
-                            ref="tree"
-                            :data="data"
-                            :props="defaultProps"
-                            @node-click="handleNodeClick"
-                            node-key="id"></el-tree>
+                    <div class="home-left-content">
+                        <el-tree
+                                class="home-left-tree"
+                                @node-contextmenu="nodeContextMenu"
+                                :highlight-current="true"
+                                ref="tree"
+                                :data="data"
+                                :props="defaultProps"
+                                @node-click="handleNodeClick"
+                                node-key="id"></el-tree>
+                    </div>
                 </div>
                 <div class="home-right">
                     <div class="home-right-top">
@@ -61,7 +63,7 @@
                     </div>
                     <div class="home-right-bottom">
                         <div class="home-right-markdown">
-                            <mavon-editor v-model="content" class="home-right-markdown-input" ref="mavon"  @imgAdd="$imgAdd"/>
+                            <mavon-editor v-model="content" class="home-right-markdown-input" ref="mavon"  @imgAdd="$imgAdd" @save="save"/>
                         </div>
                     </div>
 
@@ -122,6 +124,9 @@
         methods: {
             getHttp(){
               return this.http
+            },
+            save(){
+                this.insert()
             },
             //右键菜单
             // eslint-disable-next-line no-unused-vars
@@ -296,29 +301,37 @@
         flex: 1;
         height: 100%;
         overflow-y: scroll;
+        width: 100%;
     }
     .home-content-content{
         display: flex;
         flex-direction: row;
         flex: 1;
         height: 100%;
-        overflow: hidden;
+        width: 100%;
     }
     .home-left{
-        background: #545C64;
-        width: 200px;
+        background: white;
+        width: auto;
+        min-width: 200px;
+        overflow-y: auto;
+    }
+    .home-left-content{
+        width: 100%;
+        height: 100%;
     }
     .contextmenu-item{
         padding: 10px;
     }
     .home-left-tree{
-        width: 200px;
+        width: 100%;
     }
     .home-right{
         flex: 1;
         display: flex;
         flex-direction: column;
         height: 100%;
+        overflow: hidden;
     }
     .home-right-bottom{
         display: flex;
