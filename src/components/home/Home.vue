@@ -3,35 +3,18 @@
         <el-dialog title="菜单" :visible.sync="dialogTableVisible">
             <div>
                 <div class="contextmenu-root-add contextmenu-item hand" @click="prepareForAdd(true)">新增根目录</div>
+                <el-divider></el-divider>
                 <div class="contextmenu-add  contextmenu-item hand" @click="prepareForAdd(false)">新建</div>
+                <el-divider></el-divider>
                 <div class="contextmenu-delete  contextmenu-item hand" @click="deleltBog">删除</div>
             </div>
         </el-dialog>
         <div class="home-top">
-            <el-menu
-                    class="el-menu-demo"
-                    mode="horizontal"
-                    background-color="#545c64"
-                    text-color="#fff"
-                    active-text-color="#ffd04b">
-                <el-menu-item index="1">处理中心</el-menu-item>
-                <el-submenu index="2">
-                    <template slot="title">我的工作台</template>
-                    <el-menu-item index="2-1">选项1</el-menu-item>
-                    <el-menu-item index="2-2">选项2</el-menu-item>
-                    <el-menu-item index="2-3">选项3</el-menu-item>
-                    <el-submenu index="2-4">
-                        <template slot="title">选项4</template>
-                        <el-menu-item index="2-4-1">选项1</el-menu-item>
-                        <el-menu-item index="2-4-2">选项2</el-menu-item>
-                        <el-menu-item index="2-4-3">选项3</el-menu-item>
-                    </el-submenu>
-                </el-submenu>
-                <el-menu-item index="3" disabled style="flex: 1"></el-menu-item>
+            <div class="home-top-content">
                 <div class="home-top-save">
-                    <el-button class="home-top-save-btn" type="primary" size="medium" @click="insert">{{getOperateStr}}</el-button>
+                    <el-button class="home-top-save-btn"   size="medium" @click="insert">{{getOperateStr}}</el-button>
                 </div>
-            </el-menu>
+            </div>
         </div>
 
         <div class="home-content">
@@ -70,6 +53,8 @@
                 </div>
             </div>
         </div>
+
+        <div class="home-bottom"> </div>
 
     </div>
 </template>
@@ -288,6 +273,10 @@
     .hand{
         cursor: pointer;
     }
+    .el-divider{
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
     .home-root{
         display: flex;
         flex-direction: column;
@@ -310,7 +299,30 @@
         height: 100%;
         width: 100%;
     }
+    .home-top{
+        border-bottom: 1px gainsboro solid;
+        display: flex;
+        flex-direction: column;
+        background: #F7F7F7;
+        height: 50px;
+    }
+    .home-top-content{
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .home-top-save{
+        display: flex;
+        justify-content: flex-end;
+        flex-direction: row;
+        padding-right: 20px;
+    }
+    .home-top-save-btn{
+        height: 35px;
+    }
     .home-left{
+        border-right: 1px gainsboro solid;
         background: white;
         width: auto;
         min-width: 200px;
@@ -322,6 +334,8 @@
     }
     .contextmenu-item{
         padding: 10px;
+        font-size: 18px;
+
     }
     .home-left-tree{
         width: 100%;
@@ -332,6 +346,9 @@
         flex-direction: column;
         height: 100%;
         overflow: hidden;
+    }
+    .home-right-top{
+        padding-top: 2px;
     }
     .home-right-bottom{
         display: flex;
@@ -361,16 +378,10 @@
         display: flex;
         flex-direction: row;
     }
-    .home-top-save{
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-        padding-right: 20px;
+    /deep/ .el-tabs__header{
+        margin-bottom: 0px;
     }
-    .home-top-save-btn{
-        height: 35px;
-    }
+
     /deep/.is-current>.el-tree-node__content{
         background: white;
         position: relative;
@@ -378,6 +389,7 @@
 
     /deep/ .el-tree-node__content{
         height: 40px;
+        border-bottom: 1px gainsboro solid;
     }
 
     /deep/.is-current>.el-tree-node__content::before{
@@ -410,5 +422,11 @@
     }
     /deep/ .v-note-show{
         flex: 1;
+    }
+
+    .home-bottom{
+        height: 20px;
+        border-top: 1px gainsboro solid;
+        background-color:white;
     }
 </style>
