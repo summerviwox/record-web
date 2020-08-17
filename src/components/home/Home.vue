@@ -291,6 +291,7 @@
         height: 100%;
         overflow-y: scroll;
         width: 100%;
+        overflow: hidden;
     }
     .home-content-content{
         display: flex;
