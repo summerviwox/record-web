@@ -1,6 +1,9 @@
 <template>
   <div id="app">
-    <router-view></router-view>
+    <keep-alive>
+      <router-view  v-if="this.$route.meta.keepAlive"></router-view>
+    </keep-alive>
+    <router-view v-if="!this.$route.meta.keepAlive"></router-view>
   </div>
 </template>
 
@@ -12,7 +15,7 @@ export default {
 
   },
   mounted(){
-    this.$router.push('/login',{})
+
   }
 }
 </script>

@@ -3,7 +3,7 @@
         <div class="login-input-content">
             <el-image :src="head" class="login-head"/>
             <el-input v-model="loginInput.name" placeholder="请输入内容" class="login-input-name"></el-input>
-            <el-input v-model="loginInput.pwd" placeholder="请输入内容" class="login-input-pwd"></el-input>
+            <el-input v-model="loginInput.pwd" placeholder="请输入内容" class="login-input-pwd" show-password></el-input>
             <el-button type="primary" class="login-login" @click="login">登录</el-button>
         </div>
 
@@ -24,10 +24,15 @@
        },
         methods:{
             login(){
-                if(this.loginInput.name==='summer'&&this.loginInput.pwd==='123456'){
+                if(this.loginInput.name==='summer'&&this.loginInput.pwd==='summerviwox'){
+                    let o = {name:this.loginInput.name,pwd:this.loginInput.pwd,time:new Date().getTime()}
+                    localStorage.setItem('loginres',JSON.stringify(o) )
                     this.$router.push('/home',{})
                 }
             }
+        },
+        mounted(){
+            console("12")
         }
     }
 </script>
