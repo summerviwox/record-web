@@ -1,5 +1,5 @@
 <template>
-  <div class="home-root">
+  <div class="home-root" @mousemove="dragOnMouseMove($event)" @mouseup="dragOnMouseUp($event)">
     <el-dialog title="菜单" :visible.sync="dialogTableVisible">
       <div>
         <div class="contextmenu-root-add contextmenu-item hand" @click="prepareForAdd(true)">新增根目录</div>
@@ -37,7 +37,7 @@
 
     <div class="home-content">
       <div class="home-content-content">
-        <div class="home-left">
+        <div class="home-left" :style="{width:leftwidth +'px'}">
           <div class="home-left-content">
             <el-tree
                 class="home-left-tree"
@@ -50,6 +50,7 @@
                 node-key="id"></el-tree>
           </div>
         </div>
+        <div class="home-mid-drag"   @mousedown="dragOnMouseDown($event)"></div>
         <div class="home-right">
           <div class="home-right-top">
             <div class="home-right-top-tabscontent">
@@ -103,8 +104,9 @@ export default {
       tabList:[],
       dialogTableVisible:false,
       tabIndex: 2,
-
-
+      drag:false,
+      leftwidth:200,
+      initX:0,
       content: '',
       data:[],
       currentNode:null,
@@ -335,6 +337,23 @@ export default {
       }).catch(e=>{
         this.$message(e)
       })
+    },
+
+    dragOnMouseDown(e){
+      this.drag = true
+      this.initX = e.clientX
+    },
+    dragOnMouseMove(e){
+      if(this.drag){
+        let a = (e.clientX - this.initX)
+        this.leftwidth = (this.leftwidth +a)
+        console.error(this.leftwidth )
+        this.initX = e.clientX
+      }
+    },
+    dragOnMouseUp(e){
+      e.target.clientX
+      this.drag = false
     }
   },
   mounted() {
@@ -459,6 +478,11 @@ export default {
   overflow-y: auto;
   background: url("../../assets/hexellence.png");
 
+}
+
+.home-mid-drag{
+  width: 10px;
+  cursor:pointer;
 }
 
 .home-left::-webkit-scrollbar {
