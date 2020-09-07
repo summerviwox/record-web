@@ -1,6 +1,6 @@
 <template>
     <div class="html-root">
-        <div v-html="html" class="html-content"></div>
+        <div v-html="html" class="html-content markdown-body"></div>
     </div>
 </template>
 
@@ -31,6 +31,8 @@
 </script>
 
 <style scoped>
+@import '../../../node_modules/mavon-editor/dist/css/index.css';
+
     .html-root{
         height: 100%;
         overflow: auto;

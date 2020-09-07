@@ -3,6 +3,7 @@ import VueRouter from "vue-router"
 import Home from "@/components/home/Home";
 import Login from "@/components/login/Login";
 import html from "@/components/html/Html";
+import person from "@/components/person/Person"
 Vue.use(VueRouter)
 const router = new VueRouter({
     routes:[
@@ -32,6 +33,13 @@ const router = new VueRouter({
             component:html,
             meta:{
                 keepAlive:false
+            }
+        },
+        {
+            path:'/person',
+            component: person,
+            meta: {
+                keepAlive: false
             }
         }
     ]

@@ -1,12 +1,12 @@
 <template>
   <div class="home-root" @mousemove="dragOnMouseMove($event)" @mouseup="dragOnMouseUp($event)">
     <el-dialog title="菜单" :visible.sync="dialogTableVisible">
-      <div>
-        <div class="contextmenu-root-add contextmenu-item hand" @click="prepareForAdd(true)">新增根目录</div>
+      <div  class="home-dialog">
+        <div class="item-dialog" @click="prepareForAdd(true)">新增根目录</div>
         <el-divider></el-divider>
-        <div class="contextmenu-add  contextmenu-item hand" @click="prepareForAdd(false)">新建</div>
+        <div class="item-dialog" @click="prepareForAdd(false)">新建</div>
         <el-divider></el-divider>
-        <div class="contextmenu-delete  contextmenu-item hand" @click="deleltBog">删除</div>
+        <div class="item-dialog" @click="deleltBog">删除</div>
       </div>
     </el-dialog>
     <div class="home-top">
@@ -14,7 +14,6 @@
         <div class="home-top-left">
 
         </div>
-
         <div class="home-top-right">
           <el-dropdown @command="dropdownMenu">
             <div class="home-top-right-content">
@@ -30,7 +29,6 @@
               <el-dropdown-item command="3">退出登录</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
-
         </div>
       </div>
     </div>
@@ -52,29 +50,12 @@
         </div>
         <div class="home-mid-drag"   @mousedown="dragOnMouseDown($event)"></div>
         <div class="home-right">
-          <div class="home-right-top">
-            <div class="home-right-top-tabscontent">
-              <el-tabs class="el-tabs" v-model="editableTabsValue" type="card" closable @tab-remove="removeTabList" @tab-click="tabClick">
-                <el-tab-pane
-                    v-for="(item) in tabList"
-                    :key="item.id"
-                    :label="item.title"
-                    :name="item.id.toString()"
-                >
-                </el-tab-pane>
-              </el-tabs>
-            </div>
-            <div class="home-right-top-save">
-              <el-button class="home-right-top-save-btn" size="medium" @click="insert">{{getOperateStr}}</el-button>
-              <el-button class="home-right-top-share-btn" size="medium" @click="share" v-if="this.currentNode">分享</el-button>
-            </div>
-          </div>
           <div class="home-right-bottom">
             <div class="home-right-markdown">
               <mavon-editor v-model="content" class="home-right-markdown-input" ref="mavon"  @imgAdd="$imgAdd" @save="save" >
                 <template v-slot:left-toolbar-after v-if="this.currentNode">
                   <div style="display: inline-flex;height: 30px;flex-direction: column">
-                    <img class="save" src="../../assets/share.png" title="分享" @click="share" />
+                    <img class="share" src="../../assets/share.png" title="分享" @click="share" />
                   </div>
                 </template>
               </mavon-editor>
@@ -91,6 +72,7 @@
 </template>
 
 <script>
+import userDE from "@/logic/UserDE"
 export default {
   name:'Home',
   components: {
@@ -163,8 +145,12 @@ export default {
     },
     dropdownMenu(command){
       switch (command) {
+        case "1":
+          this.$router.push('/person',{})
+          break
         case "3"://退出登录
           localStorage.removeItem('loginres')
+            this.$route.meta.keepAlive = false
           this.$router.push('/login',{})
           break
       }
@@ -178,7 +164,6 @@ export default {
         }else{
           this.$message(res.data.errorMessage)
         }
-
       }).catch(e=>{
         this.dialogTableVisible = false
         this.$message(e)
@@ -357,282 +342,17 @@ export default {
     }
   },
   mounted() {
-    if(!localStorage.getItem('loginres')){
+    if(!userDE.isLogined()){
+      this.$route.meta.keepAlive = false
       this.$router.push('/login',{});
     }else{
+      this.$route.meta.keepAlive = true
       this.getchildData(0)
-    }
-    // document.getElementsByClassName("v-show-content scroll-style scroll-style-border-radius")[0].style.backgroundColor = 'transparent'
-    // document.getElementsByClassName("content-input-wrapper")[0].style.backgroundColor = 'transparent'
-    // document.getElementsByClassName("auto-textarea-wrapper content-input")[0].style.backgroundColor = 'transparent'
-
-
-
-  },
-  computed:{
-    getOperateStr(){
-      return this.insertModel ?"新增":"更新"
     }
   }
 };
 </script>
 
-<style scoped>
-.save{
-  padding: 3px;
-  width: 20px;
-  height: 20px;
-  position: relative;
-  top: 8px
-}
-.save:hover{
-  background-color: #E9E9EB;
-  border-radius: 4px;
-}
-.hand{
-  cursor: pointer;
-}
-.el-divider{
-  margin-top: 5px;
-  margin-bottom: 5px;
-}
-.home-root{
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  width: 100%;
-  height: 100%;
-  background-image: url("../../assets/noisy_grid.png") ;
-
-}
-.home-content{
-  display: flex;
-  flex-direction: row;
-  flex: 1;
-  height: 100%;
-  overflow-y: scroll;
-  width: 100%;
-  overflow: hidden;
-}
-.home-content-content{
-  display: flex;
-  flex-direction: row;
-  flex: 1;
-  height: 100%;
-  width: 100%;
-}
-.home-top{
-  border-bottom: 1px gainsboro solid;
-  display: flex;
-  flex-direction: column;
-  /*background: #F7F7F7;*/
-  height: 50px;
-}
-.home-top-content{
-  flex: 1;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-}
-.home-top-left{
-  flex: 1;
-}
-.home-top-right{
-  padding-right: 10px;
-  cursor: pointer;
-}
-.home-top-right-content{
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-.home-top-right-name{
-  padding-left: 2px;
-}
-
-.el-tabs{
-  width: 100%;
-}
-.home-right-top-tabscontent{
-  width: calc(100% - 160px);
-}
-
-
-.home-right-top-save{
-  display: flex;
-  width: 150px;
-  justify-content: flex-end;
-  flex-direction: row;
-  padding-right: 4px;
-  padding-left: 4px;
-}
-.home-right-top-save-btn{
-  height: 35px;
-}
-.home-left{
-  border-right: 1px gainsboro solid;
-  /*background: white;*/
-  width: auto;
-  min-width: 200px;
-  overflow-y: auto;
-  background: url("../../assets/hexellence.png");
-
-}
-
-.home-mid-drag{
-  width: 10px;
-  cursor:pointer;
-}
-
-.home-left::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
-}
-.home-left::-webkit-scrollbar-thumb {
-  border-radius: 5px;
-  background:darkgray;
-}
-.home-left::-webkit-scrollbar-track {
-  background: gainsboro;
-}
-
-/deep/.v-note-wrapper .v-note-panel .v-note-edit.divarea-wrapper.scroll-style::-webkit-scrollbar {
-  width: 4px;
-  background-color: #e5e5e5;
-}
-
-/deep/.v-note-wrapper .v-note-panel .v-note-show .v-show-content.scroll-style::-webkit-scrollbar, .v-note-wrapper .v-note-panel .v-note-show .v-show-content-html.scroll-style::-webkit-scrollbar {
-  width: 4px;
-  background-color: #e5e5e5;
-}
-
-.home-left-content{
-  width: 100%;
-
-}
-.contextmenu-item{
-  padding: 10px;
-  font-size: 18px;
-
-}
-.home-left-tree{
-  width: 100%;
-}
-.home-right{
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  overflow: hidden;
-}
-.home-right-top{
-  display: flex;
-  flex-direction: row;
-  padding-top: 2px;
-  background: url("../../assets/hexellence.png");
-  align-items: center;
-  display: none;
-}
-
-.home-right-bottom{
-  display: flex;
-  flex-direction: row;
-  height: 100%;
-}
-
-.home-right-markdown{
-  flex: 1;
-  overflow-y: hidden;
-  height: 100%;
-}
-.home-right-html{
-  flex: 1;
-  height: 100%;
-}
-.home-right-html-content{
-  height: 100%;
-  overflow-y: scroll;
-  text-align: left;
-}
-.home-right-markdown-input{
-  height: 100%;
-  width: 100%;
-}
-.el-tree{
-  background: transparent;
-  color: black;
-}
-
-
-.el-menu-demo{
-  display: flex;
-  flex-direction: row;
-}
-/deep/ .el-tabs__header{
-  margin-bottom: 0px;
-}
-
-/deep/.is-current>.el-tree-node__content{
-  /*background: white;*/
-  position: relative;
-}
-
-/deep/ .el-tree-node__content{
-  height: 40px;
-  border-bottom: 1px gainsboro solid;
-}
-
-/deep/.is-current>.el-tree-node__content::before{
-  content: "";
-  position: absolute;
-  width:5px;
-  height: 100%;
-  background: #409EFF;
-  top: 0;
-  left: 0;;
-}
-/deep/ .hljs{
-  border-radius: 4px;
-  background: black;
-  display: block;
-  text-align: left;
-  padding: 10px;
-  color: white;
-}
-/deep/ .hljs-comment{
-  color: limegreen;
-}
-
-/*/deep/ .v-note-wrapper{*/
-/*    background-color: transparent;*/
-/*}*/
-/*/deep/ textarea{*/
-/*    background-color: transparent;*/
-/*}*/
-/*/deep/ .content-input-wrapper{*/
-/*    background-color: transparent;*/
-/*}*/
-/*/deep/ .content-input{*/
-/*    background-color: transparent;*/
-/*}*/
-
-/*/deep/ element.style{*/
-/*    background-color: transparent;*/
-/*}*/
-
-
-
-/deep/ .v-note-edit{
-  width: 10px;
-}
-/deep/ .v-note-show{
-  flex: 1;
-}
-
-.home-bottom{
-  height: 20px;
-  border-top: 1px gainsboro solid;
-  /*background-color:white;*/
-}
+<style lang="less" scoped>
+@import "home.less";
 </style>
