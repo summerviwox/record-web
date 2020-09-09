@@ -36,17 +36,35 @@
     <div class="home-content">
       <div class="home-content-content">
         <div class="home-left" :style="{width:leftwidth +'px'}">
-          <div class="home-left-content">
-            <el-tree
-                class="home-left-tree"
-                @node-contextmenu="nodeContextMenu"
-                :highlight-current="true"
-                ref="tree"
-                :data="data"
-                :props="defaultProps"
-                @node-click="handleNodeClick"
-                node-key="id"></el-tree>
-          </div>
+
+          <el-tabs type="border-card" class="home-left-tabs" stretch="true">
+            <el-tab-pane label="目录">
+              <div class="home-left-dir-content">
+                <el-tree
+                    class="home-left-tree"
+                    @node-contextmenu="nodeContextMenu"
+                    :highlight-current="true"
+                    ref="tree"
+                    :data="data"
+                    :props="defaultProps"
+                    @node-click="handleNodeClick"
+                    node-key="id"></el-tree>
+              </div>
+            </el-tab-pane>
+            <el-tab-pane label="搜索" class="home-left-search">
+              <el-input v-model="input" placeholder="请输入内容" class="home-left-search-input" clearable="true" size="small" suffix-icon="el-icon-search"></el-input>
+              <div class="home-left-search-articles;">
+                <div style="height: 40px;border-bottom: 1px gainsboro solid;text-align: center;line-height: 40px">123</div>
+                <div style="height: 40px;border-bottom: 1px gainsboro solid;text-align: center;line-height: 40px">123</div>
+                <div style="height: 40px;border-bottom: 1px gainsboro solid;text-align: center;line-height: 40px">123</div>
+                <div style="height: 40px;border-bottom: 1px gainsboro solid;text-align: center;line-height: 40px">123</div>
+                <div style="height: 40px;border-bottom: 1px gainsboro solid;text-align: center;line-height: 40px">123</div>
+                <div style="height: 40px;border-bottom: 1px gainsboro solid;text-align: center;line-height: 40px">123</div>
+                <div style="height: 40px;border-bottom: 1px gainsboro solid;text-align: center;line-height: 40px">123</div>
+                <div style="height: 40px;border-bottom: 1px gainsboro solid;text-align: center;line-height: 40px">123</div>
+              </div>
+            </el-tab-pane>
+          </el-tabs>
         </div>
         <div class="home-mid-drag"   @mousedown="dragOnMouseDown($event)"></div>
         <div class="home-right">
@@ -87,7 +105,7 @@ export default {
       dialogTableVisible:false,
       tabIndex: 2,
       drag:false,
-      leftwidth:200,
+      leftwidth:250,
       initX:0,
       content: '',
       data:[],
@@ -150,7 +168,7 @@ export default {
           break
         case "3"://退出登录
           localStorage.removeItem('loginres')
-            this.$route.meta.keepAlive = false
+          this.$route.meta.keepAlive = false
           this.$router.push('/login',{})
           break
       }
@@ -241,16 +259,16 @@ export default {
       }
     },
     share(){
-      this.$router.push({
-        path:'/html',
+      // this.$router.push({
+      //   path:'/html',
+      //   query:{id:this.currentNode.id}
+      // })
+
+      let routeData = this.$router.resolve({
+        name:'html',
         query:{id:this.currentNode.id}
       })
-
-      // let routeData = this.$router.resolve({
-      //     path:'/html',
-      //     query:{id:this.currentNode.id}
-      // })
-      // window.open(routeData.href,'_blank')
+      window.open(routeData.href,'_blank')
     },
     getFirstLineStr(str){
       let title =  str.indexOf('\n')==-1?str:str.substring(0,str.indexOf('\n'))

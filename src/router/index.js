@@ -30,6 +30,7 @@ const router = new VueRouter({
         },
         {
             path:'/html',
+            name:"html",
             component:html,
             meta:{
                 keepAlive:false
