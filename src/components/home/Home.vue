@@ -37,8 +37,8 @@
       <div class="home-content-content">
         <div class="home-left" :style="{width:leftwidth +'px'}">
 
-          <el-tabs type="border-card" class="home-left-tabs" stretch="true">
-            <el-tab-pane label="目录">
+          <el-tabs type="border-card" class="home-left-tabs" stretch="true" @tab-click="dirsearchTabClick">
+            <el-tab-pane label="目录" name = "目录">
               <div class="home-left-dir-content">
                 <el-tree
                     class="home-left-tree"
@@ -51,17 +51,21 @@
                     node-key="id"></el-tree>
               </div>
             </el-tab-pane>
-            <el-tab-pane label="搜索" class="home-left-search">
-              <el-input v-model="input" placeholder="请输入内容" class="home-left-search-input" clearable="true" size="small" suffix-icon="el-icon-search"></el-input>
-              <div class="home-left-search-articles;">
-                <div style="height: 40px;border-bottom: 1px gainsboro solid;text-align: center;line-height: 40px">123</div>
-                <div style="height: 40px;border-bottom: 1px gainsboro solid;text-align: center;line-height: 40px">123</div>
-                <div style="height: 40px;border-bottom: 1px gainsboro solid;text-align: center;line-height: 40px">123</div>
-                <div style="height: 40px;border-bottom: 1px gainsboro solid;text-align: center;line-height: 40px">123</div>
-                <div style="height: 40px;border-bottom: 1px gainsboro solid;text-align: center;line-height: 40px">123</div>
-                <div style="height: 40px;border-bottom: 1px gainsboro solid;text-align: center;line-height: 40px">123</div>
-                <div style="height: 40px;border-bottom: 1px gainsboro solid;text-align: center;line-height: 40px">123</div>
-                <div style="height: 40px;border-bottom: 1px gainsboro solid;text-align: center;line-height: 40px">123</div>
+            <el-tab-pane label="搜索" class="home-left-search" name="搜索">
+              <el-input v-model="searchInput" placeholder="请输入内容" @keyup.enter.native="articleSearch($event)" class="home-left-search-input" clearable="true" size="small" suffix-icon="el-icon-search"></el-input>
+              <div class="home-left-search-articles">
+                <el-tree
+                    class="home-left-tree"
+                    @node-contextmenu="nodeContextMenu"
+                    :highlight-current="true"
+                    ref="searchtree"
+                    :data="searchArtilces"
+                    :props="defaultProps"
+                    @node-click="handleNodeClick"
+                    node-key="id"></el-tree>
+<!--                <div class="home-left-search-article"  v-for="item in searchArtilces" :key="item.id" @click="handleNodeClick(item)">-->
+<!--                  {{item.title}}-->
+<!--                </div>-->
               </div>
             </el-tab-pane>
           </el-tabs>
@@ -97,6 +101,9 @@ export default {
   },
   data() {
     return {
+      leftMenu:0,//0 目录选中 1 搜索选中
+      searchArtilces:[],
+      searchInput:"",
       avatar:'http://222.186.36.75:8888/blog/13.png',
       http:"http://222.186.36.75:9999/record-b",
       insertModel:true,//新增还是更新
@@ -105,7 +112,7 @@ export default {
       dialogTableVisible:false,
       tabIndex: 2,
       drag:false,
-      leftwidth:250,
+      leftwidth:220,
       initX:0,
       content: '',
       data:[],
@@ -186,12 +193,6 @@ export default {
         this.dialogTableVisible = false
         this.$message(e)
       })
-    },
-    tabClick(tab){
-      if(Number(tab.name)!='新增'){
-        this.insertModel = false
-      }
-      this.content = this.getTabData(Number(tab.name)).markdown
     },
     getTabData(name){
       for(let i=0;i<this.tabList.length;i++){
@@ -282,40 +283,20 @@ export default {
       this.currentNode = object
       this.insertModel = false
       this.$axios.get(this.getHttp()+'/blog/selectWithOutHtmlDataByParentId',{params:{id:object.id}}).then(res=>{
-        this.$refs.tree.updateKeyChildren(object.id,res.data)
+
+        if(this.leftMenu===0){
+          this.$refs.tree.updateKeyChildren(object.id,res.data)
+        }else{
+          this.$refs.searchtree.updateKeyChildren(object.id,res.data)
+        }
         this.content = object.markdown
-        this.pushTabList(object)
       }).catch(e=>{
         this.$message(e)
       })
     },
-    removeTabList(id){
-      //name 和 id 相等
-      for(let i=0;i<this.tabList.length;i++){
-        if(id==this.tabList[i].id){
-          this.tabList.splice(i,1)
-          break
-        }
-      }
-    },
-    pushTabList(object){
-      var have = false
-      for(let i=0;i<this.tabList.length;i++){
-        if(object.id==this.tabList[i].id){
-          have = true
-          break
-        }
-      }
-      if(!have){
-        this.tabList.push(object)
-      }
-    },
     getchildData(i){
       this.$axios.get(this.getHttp()+'/blog/selectWithOutHtmlDataByParentId',{params:{id:i}}).then(res=>{
         this.data = res.data
-        for(let i=0;i<this.data.length;i++){
-          this.pushTabList(this.data[i])
-        }
         this.currentNode = {id:0}
       }).catch(e=>{
         this.$message(e)
@@ -357,6 +338,20 @@ export default {
     dragOnMouseUp(e){
       e.target.clientX
       this.drag = false
+    },
+    //文章搜索
+    articleSearch(e){
+      e
+      this.$axios.post(this.getHttp()+'/blog/search',{
+        markdown:this.searchInput
+      }).then(res=>{
+          this.searchArtilces = res.data.data
+      }).catch(e=>{
+        this.$message(e)
+      })
+    },
+    dirsearchTabClick(e){
+      this.leftMenu = e.name==='目录'?0:1
     }
   },
   mounted() {

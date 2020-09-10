@@ -102,13 +102,13 @@
       &::-webkit-scrollbar-track {
         background: gainsboro;
       }
-
-      .home-left-tree{
-        width: 100%;
-        background: transparent;
-      }
     }
   }
+  .home-left-tree{
+    width: 100%;
+    background: transparent;
+  }
+
   .el-tabs--border-card{
     background: transparent;
     box-shadow: none;
@@ -142,11 +142,17 @@
     .home-left-search-input{
       margin: 4px 5px;
       width: calc(100% - 10px);
-      .home-left-search-articles{
-        width: 100%;
-        height: 100%;
-        background-color: #3a8ee6;
-      }
+    }
+    .home-left-search-articles{
+      width: 100%;
+      height: 100%;
+    }
+    .home-left-search-article{
+      height: 40px;
+      border-bottom: 1px gainsboro solid;
+      text-align: center;
+      line-height: 40px;
+      cursor: pointer;
     }
   }
 }
