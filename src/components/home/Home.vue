@@ -37,7 +37,7 @@
       <div class="home-content-content">
         <div class="home-left" :style="{width:leftwidth +'px'}">
 
-          <el-tabs type="border-card" class="home-left-tabs" stretch="true" @tab-click="dirsearchTabClick">
+          <el-tabs v-model="activeName" type="border-card" class="home-left-tabs" stretch="true" @tab-click="dirsearchTabClick">
             <el-tab-pane label="目录" name = "目录">
               <div class="home-left-dir-content">
                 <el-tree
@@ -101,7 +101,7 @@ export default {
   },
   data() {
     return {
-      leftMenu:0,//0 目录选中 1 搜索选中
+      activeName:"目录",
       searchArtilces:[],
       searchInput:"",
       avatar:'http://222.186.36.75:8888/blog/13.png',
@@ -156,6 +156,9 @@ export default {
     //右键菜单
     // eslint-disable-next-line no-unused-vars
     nodeContextMenu(event,object,node,self){
+      if(this.activeName!=='目录'){
+        return
+      }
       this.currentNode = object
       this.dialogTableVisible = true
     },
@@ -194,20 +197,6 @@ export default {
         this.$message(e)
       })
     },
-    getTabData(name){
-      for(let i=0;i<this.tabList.length;i++){
-        if(name==this.tabList[i].id){
-          return this.tabList[i]
-        }
-      }
-    },
-    updateTabData(name,markdown){
-      for(let i=0;i<this.tabList.length;i++){
-        if(name==this.tabList[i].id){
-          this.tabList[i].markdown = markdown
-        }
-      }
-    },
     //保存
     insert(){
       if(this.insertModel){
@@ -226,8 +215,8 @@ export default {
         }).then(res=>{
           this.$message(res.data.data.id!=0?"新增成功":"新增失败")
           if(res.data.data.id!=0){
-            this.$refs.tree.append(res.data.data,this.currentNode.id)
-            this.currentNode = res.data.data
+            this.$refs.tree.append(res.data.data,this.currentNode.id)//res.data.data 已关联data
+            //this.currentNode = res.data.data// 后又将 this.currentNode关联data 后续右键或者点击一定或关联this.currentNode 所以这里没有必要
             this.insertModel = false
           }
         }).catch(e=>{
@@ -251,8 +240,10 @@ export default {
           this.$message(res.data==1?"更新成功":"更新失败"+res.data)
           if(res.data==1){
             this.currentNode.markdown = this.content
-            this.updateTabData(this.currentNode.id,this.content)
-            // this.$refs.tree.updateKeyChildren(this.currentNode.id,)
+          }
+          var node = (this.activeName === '目录')?this.$refs.searchtree.getNode(this.currentNode.id):this.$refs.tree.getNode(this.currentNode.id)
+          if(node){
+            node.data = this.currentNode
           }
         }).catch(e=>{
           this.$message(e)
@@ -284,7 +275,7 @@ export default {
       this.insertModel = false
       this.$axios.get(this.getHttp()+'/blog/selectWithOutHtmlDataByParentId',{params:{id:object.id}}).then(res=>{
 
-        if(this.leftMenu===0){
+        if(this.activeName==="目录"){
           this.$refs.tree.updateKeyChildren(object.id,res.data)
         }else{
           this.$refs.searchtree.updateKeyChildren(object.id,res.data)
@@ -340,8 +331,7 @@ export default {
       this.drag = false
     },
     //文章搜索
-    articleSearch(e){
-      e
+    articleSearch(){
       this.$axios.post(this.getHttp()+'/blog/search',{
         markdown:this.searchInput
       }).then(res=>{
@@ -349,9 +339,6 @@ export default {
       }).catch(e=>{
         this.$message(e)
       })
-    },
-    dirsearchTabClick(e){
-      this.leftMenu = e.name==='目录'?0:1
     }
   },
   mounted() {
