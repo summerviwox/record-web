@@ -117,7 +117,7 @@ export default {
       dialogTableVisible:false,
       tabIndex: 2,
       drag:false,
-      leftwidth:220,
+      leftwidth:250,
       initX:0,
       content: '',
       data:[],
