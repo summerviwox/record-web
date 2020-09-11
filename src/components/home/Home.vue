@@ -55,6 +55,13 @@
               <el-input v-model="searchInput" placeholder="请输入内容" @keyup.enter.native="articleSearch($event)" class="home-left-search-input" clearable="true" size="small" suffix-icon="el-icon-search"></el-input>
               <div class="home-left-search-articles">
                 <el-tree
+                    @node-drag-start="handleDragStart"
+                    @node-drag-enter="handleDragEnter"
+                    @node-drag-leave="handleDragLeave"
+                    @node-drag-over="handleDragOver"
+                    @node-drag-end="handleDragEnd"
+                    @node-drop="handleDrop"
+                    draggable
                     class="home-left-tree"
                     @node-contextmenu="nodeContextMenu"
                     :highlight-current="true"
@@ -341,6 +348,28 @@ export default {
       })
     }
   },
+
+
+  handleDragStart(node, ev) {
+    console.log('drag start', node);
+  },
+  handleDragEnter(draggingNode, dropNode, ev) {
+    console.log('tree drag enter: ', dropNode.label);
+  },
+  handleDragLeave(draggingNode, dropNode, ev) {
+    console.log('tree drag leave: ', dropNode.label);
+  },
+  handleDragOver(draggingNode, dropNode, ev) {
+    console.log('tree drag over: ', dropNode.label);
+  },
+  handleDragEnd(draggingNode, dropNode, dropType, ev) {
+    console.log('tree drag end: ', dropNode && dropNode.label, dropType);
+  },
+  handleDrop(draggingNode, dropNode, dropType, ev) {
+    console.log('tree drop: ', dropNode.label, dropType);
+  },
+
+
   mounted() {
     if(!userDE.isLogined()){
       this.$route.meta.keepAlive = false
