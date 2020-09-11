@@ -20,7 +20,7 @@
               <el-image
                   style="width: 40px; height: 40px"
                   :src="avatar"
-                  :fit="fit"></el-image>
+                  fit="fill"></el-image>
               <div class="home-top-right-name">summer</div>
             </div>
             <el-dropdown-menu slot="dropdown">
@@ -37,7 +37,7 @@
       <div class="home-content-content">
         <div class="home-left" :style="{width:leftwidth +'px'}">
 
-          <el-tabs v-model="activeName" type="border-card" class="home-left-tabs" stretch="true" @tab-click="dirsearchTabClick">
+          <el-tabs v-model="activeName" type="border-card" class="home-left-tabs" :stretch="tabstretch">
             <el-tab-pane label="目录" name = "目录">
               <div class="home-left-dir-content">
                 <el-tree
@@ -48,20 +48,16 @@
                     :data="data"
                     :props="defaultProps"
                     @node-click="handleNodeClick"
-                    node-key="id"></el-tree>
+                    node-key="id"
+                    @node-drop="handleDrop"
+                    draggable
+                ></el-tree>
               </div>
             </el-tab-pane>
             <el-tab-pane label="搜索" class="home-left-search" name="搜索">
-              <el-input v-model="searchInput" placeholder="请输入内容" @keyup.enter.native="articleSearch($event)" class="home-left-search-input" clearable="true" size="small" suffix-icon="el-icon-search"></el-input>
+              <el-input v-model="searchInput" placeholder="请输入内容" @keyup.enter.native="articleSearch($event)" class="home-left-search-input" size="small" suffix-icon="el-icon-search"></el-input>
               <div class="home-left-search-articles">
                 <el-tree
-                    @node-drag-start="handleDragStart"
-                    @node-drag-enter="handleDragEnter"
-                    @node-drag-leave="handleDragLeave"
-                    @node-drag-over="handleDragOver"
-                    @node-drag-end="handleDragEnd"
-                    @node-drop="handleDrop"
-                    draggable
                     class="home-left-tree"
                     @node-contextmenu="nodeContextMenu"
                     :highlight-current="true"
@@ -69,10 +65,11 @@
                     :data="searchArtilces"
                     :props="defaultProps"
                     @node-click="handleNodeClick"
-                    node-key="id"></el-tree>
-<!--                <div class="home-left-search-article"  v-for="item in searchArtilces" :key="item.id" @click="handleNodeClick(item)">-->
-<!--                  {{item.title}}-->
-<!--                </div>-->
+                    node-key="id"
+                ></el-tree>
+                <!--                <div class="home-left-search-article"  v-for="item in searchArtilces" :key="item.id" @click="handleNodeClick(item)">-->
+                <!--                  {{item.title}}-->
+                <!--                </div>-->
               </div>
             </el-tab-pane>
           </el-tabs>
@@ -108,6 +105,7 @@ export default {
   },
   data() {
     return {
+      tabstretch:true,
       activeName:"目录",
       searchArtilces:[],
       searchInput:"",
@@ -257,6 +255,7 @@ export default {
         })
       }
     },
+
     share(){
       // this.$router.push({
       //   path:'/html',
@@ -342,33 +341,26 @@ export default {
       this.$axios.post(this.getHttp()+'/blog/search',{
         markdown:this.searchInput
       }).then(res=>{
-          this.searchArtilces = res.data.data
+        this.searchArtilces = res.data.data
       }).catch(e=>{
         this.$message(e)
       })
-    }
+    },
+    //拖拽功能
+    handleDrop(draggingNode, dropNode, dropType) {
+      console.log('tree drop: ',draggingNode.data, dropNode.data,dropType);
+      this.$axios.post(this.getHttp()+"/blog/updateParentIdByPrimaryKey",{
+        id:draggingNode.data.id,
+        parentid:(dropType==="inner")?dropNode.data.id:dropNode.data.parentid
+      })
+          .then(res=>{
+            this.$message((res.data===1)?"成功":"失败")
+          })
+          .catch(e=>{
+            this.$message(e)
+          })
+    },
   },
-
-
-  handleDragStart(node, ev) {
-    console.log('drag start', node);
-  },
-  handleDragEnter(draggingNode, dropNode, ev) {
-    console.log('tree drag enter: ', dropNode.label);
-  },
-  handleDragLeave(draggingNode, dropNode, ev) {
-    console.log('tree drag leave: ', dropNode.label);
-  },
-  handleDragOver(draggingNode, dropNode, ev) {
-    console.log('tree drag over: ', dropNode.label);
-  },
-  handleDragEnd(draggingNode, dropNode, dropType, ev) {
-    console.log('tree drag end: ', dropNode && dropNode.label, dropType);
-  },
-  handleDrop(draggingNode, dropNode, dropType, ev) {
-    console.log('tree drop: ', dropNode.label, dropType);
-  },
-
 
   mounted() {
     if(!userDE.isLogined()){
