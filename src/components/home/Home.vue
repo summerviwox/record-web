@@ -10,27 +10,7 @@
       </div>
     </el-dialog>
     <div class="home-top">
-      <div class="home-top-content">
-        <div class="home-top-left">
 
-        </div>
-        <div class="home-top-right">
-          <el-dropdown @command="dropdownMenu">
-            <div class="home-top-right-content">
-              <el-image
-                  style="width: 40px; height: 40px"
-                  :src="avatar"
-                  fit="fill"></el-image>
-              <div class="home-top-right-name">summer</div>
-            </div>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item command="1">个人中心</el-dropdown-item>
-              <el-dropdown-item command="2">账号设置</el-dropdown-item>
-              <el-dropdown-item command="3">退出登录</el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
-        </div>
-      </div>
     </div>
 
     <div class="home-content">
@@ -92,7 +72,29 @@
       </div>
     </div>
 
-    <div class="home-bottom"> </div>
+    <div class="home-bottom">
+      <div class="home-top-content">
+        <div class="home-top-left">
+
+        </div>
+        <div class="home-top-right">
+          <el-dropdown @command="dropdownMenu">
+            <div class="home-top-right-content">
+              <el-image
+                  style="width: 30px; height:30px"
+                  :src="avatar"
+                  fit="fill"></el-image>
+              <div class="home-top-right-name">summer</div>
+            </div>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item command="1">个人中心</el-dropdown-item>
+              <el-dropdown-item command="2">账号设置</el-dropdown-item>
+              <el-dropdown-item command="3">退出登录</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </div>
+      </div>
+    </div>
 
   </div>
 </template>
