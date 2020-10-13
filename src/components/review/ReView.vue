@@ -7,6 +7,7 @@
       </div>
       <div class="right" ref="right">
         <div class="html">
+
           <highlightjs language='java' :code="textareamodel" />
         </div>
       </div>

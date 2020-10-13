@@ -20,6 +20,17 @@
   display: flex;
   textarea{
     flex: 1;
+    resize: none;
+    &::-webkit-scrollbar{
+      height: 8px;
+      width: 8px;
+    }
+    &::-webkit-scrollbar-track{
+      background-color: gainsboro;
+    }
+    &::-webkit-scrollbar-thumb{
+      background-color: darkgrey;
+    }
   }
 }
 .right{
@@ -35,10 +46,24 @@
     flex: 1;
     text-align: left;
     display: flex;
+    flex-direction: column;
     highlightjs{
       width: 0;
       flex: 1;
       display: flex;
     }
+    pre{
+      margin: 0;
+    }
+  }
+  &::-webkit-scrollbar{
+    height: 8px;
+    width: 8px;
+  }
+  &::-webkit-scrollbar-track{
+    background-color: gainsboro;
+  }
+  &::-webkit-scrollbar-thumb{
+    background-color: darkgrey;
   }
 }
