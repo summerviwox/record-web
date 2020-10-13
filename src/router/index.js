@@ -4,6 +4,7 @@ import Home from "@/components/home/Home";
 import Login from "@/components/login/Login";
 import html from "@/components/html/Html";
 import person from "@/components/person/Person"
+import ReView from "@/components/review/ReView";
 Vue.use(VueRouter)
 const router = new VueRouter({
     routes:[
@@ -40,6 +41,13 @@ const router = new VueRouter({
             path:'/person',
             component: person,
             meta: {
+                keepAlive: false
+            }
+        },
+        {
+            path:"/review",
+            component: ReView,
+            meta:{
                 keepAlive: false
             }
         }

@@ -87,6 +87,7 @@
               <div class="home-top-right-name">summer</div>
             </div>
             <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item command="4">review</el-dropdown-item>
               <el-dropdown-item command="1">个人中心</el-dropdown-item>
               <el-dropdown-item command="2">账号设置</el-dropdown-item>
               <el-dropdown-item command="3">退出登录</el-dropdown-item>
@@ -108,7 +109,7 @@ export default {
   data() {
     return {
       tabstretch:true,
-      activeName:"目录",
+      activeName:"搜索",
       searchArtilces:[],
       searchInput:"",
       avatar:'http://222.186.36.75:8888/blog/13.png',
@@ -167,6 +168,7 @@ export default {
         return
       }
       this.currentNode = object
+      console.log(this.currentNode)
       this.dialogTableVisible = true
     },
     prepareForAdd(root){
@@ -187,6 +189,9 @@ export default {
           localStorage.removeItem('loginres')
           this.$route.meta.keepAlive = false
           this.$router.push('/login',{})
+          break
+        case "4":
+          this.$router.push('/review',{})
           break
       }
     },
@@ -223,7 +228,7 @@ export default {
           this.$message(res.data.data.id!=0?"新增成功":"新增失败")
           if(res.data.data.id!=0){
             this.$refs.tree.append(res.data.data,this.currentNode.id)//res.data.data 已关联data
-            //this.currentNode = res.data.data// 后又将 this.currentNode关联data 后续右键或者点击一定或关联this.currentNode 所以这里没有必要
+            this.currentNode = res.data.data
             this.insertModel = false
           }
         }).catch(e=>{
