@@ -13,62 +13,62 @@
 
     </div>
 
-    <div class="home-content">
-      <div class="home-content-content">
-        <div class="home-left" :style="{width:leftwidth +'px'}">
+    <div class="home-mid">
+      <div class="home-mid-left" :style="{width:leftwidth +'px'}">
 
-          <el-tabs v-model="activeName" type="border-card" class="home-left-tabs" :stretch="tabstretch">
-            <el-tab-pane label="目录" name = "目录">
-              <div class="home-left-dir-content">
-                <el-tree
-                    class="home-left-tree"
-                    @node-contextmenu="nodeContextMenu"
-                    :highlight-current="true"
-                    ref="tree"
-                    :data="data"
-                    :props="defaultProps"
-                    @node-click="handleNodeClick"
-                    node-key="id"
-                    @node-drop="handleDrop"
-                    draggable
-                ></el-tree>
-              </div>
-            </el-tab-pane>
-            <el-tab-pane label="搜索" class="home-left-search" name="搜索">
-              <el-input v-model="searchInput" placeholder="请输入内容" @keyup.enter.native="articleSearch($event)" class="home-left-search-input" size="small" suffix-icon="el-icon-search"></el-input>
-              <div class="home-left-search-articles">
-                <el-tree
-                    class="home-left-tree"
-                    @node-contextmenu="nodeContextMenu"
-                    :highlight-current="true"
-                    ref="searchtree"
-                    :data="searchArtilces"
-                    :props="defaultProps"
-                    @node-click="handleNodeClick"
-                    node-key="id"
-                ></el-tree>
-                <!--                <div class="home-left-search-article"  v-for="item in searchArtilces" :key="item.id" @click="handleNodeClick(item)">-->
-                <!--                  {{item.title}}-->
-                <!--                </div>-->
-              </div>
-            </el-tab-pane>
-          </el-tabs>
-        </div>
-        <div class="home-mid-drag"   @mousedown="dragOnMouseDown($event)"></div>
-        <div class="home-right">
-          <div class="home-right-bottom">
-            <div class="home-right-markdown">
-              <mavon-editor v-model="content" class="home-right-markdown-input" ref="mavon"  @imgAdd="$imgAdd" @save="save" >
-                <template v-slot:left-toolbar-after v-if="this.currentNode">
-                  <div style="display: inline-flex;height: 30px;flex-direction: column">
-                    <img class="share" src="../../assets/share.png" title="分享" @click="share" />
-                  </div>
-                </template>
-              </mavon-editor>
+        <el-tabs v-model="activeName" type="border-card" class="home-left-tabs" :stretch="tabstretch">
+          <el-tab-pane label="目录" name = "目录">
+            <div class="home-left-dir-content">
+              <el-tree
+                  class="home-left-tree"
+                  @node-contextmenu="nodeContextMenu"
+                  :highlight-current="true"
+                  ref="tree"
+                  :data="data"
+                  :props="defaultProps"
+                  @node-click="handleNodeClick"
+                  node-key="id"
+                  @node-drop="handleDrop"
+                  draggable
+              ></el-tree>
             </div>
+          </el-tab-pane>
+          <el-tab-pane label="搜索" class="home-left-search" name="搜索">
+            <el-input v-model="searchInput" placeholder="请输入内容" @keyup.enter.native="articleSearch($event)" class="home-left-search-input" size="small" suffix-icon="el-icon-search"></el-input>
+            <div class="home-left-search-articles">
+              <el-tree
+                  class="home-left-tree"
+                  @node-contextmenu="nodeContextMenu"
+                  :highlight-current="true"
+                  ref="searchtree"
+                  :data="searchArtilces"
+                  :props="defaultProps"
+                  @node-click="handleNodeClick"
+                  node-key="id"
+              ></el-tree>
+              <!--                <div class="home-mid-left-search-article"  v-for="item in searchArtilces" :key="item.id" @click="handleNodeClick(item)">-->
+              <!--                  {{item.title}}-->
+              <!--                </div>-->
+            </div>
+          </el-tab-pane>
+        </el-tabs>
+      </div>
+      <div class="home-mid-drag"   @mousedown="dragOnMouseDown($event)"></div>
+      <div class="home-mid-right home-review">
+        <mavon-editor class="home-review-markdown" :scrollStyle="scrollStyle" :code_style="code_style" v-model="content" ref="mavon" @imgAdd="$imgAdd" @save="save" >
+          <template v-slot:left-toolbar-after v-if="this.currentNode">
+            <div style="display: inline-flex;height: 30px;flex-direction: column">
+              <img class="share" src="../../assets/share.png" title="分享" @click="share" />
+            </div>
+          </template>
+        </mavon-editor>
+        <div class="home-review-html">
+          <div class="home-review-html-top">
+            <input type="text" v-model="reviewhtml"/>
           </div>
-
+          <iframe class="home-review-html-mid" :src="reviewhtml"></iframe>
         </div>
+        <re-view class="home-review-code"></re-view>
       </div>
     </div>
 
@@ -102,12 +102,17 @@
 
 <script>
 import userDE from "@/logic/UserDE"
+import ReView from "@/components/review/ReView";
 export default {
   name:'Home',
   components: {
+    ReView
   },
   data() {
     return {
+      reviewhtml:'http://www.baidu.com',
+      scrollStyle:false,
+      code_style:'dracula',
       tabstretch:true,
       activeName:"搜索",
       searchArtilces:[],

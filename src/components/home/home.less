@@ -24,24 +24,16 @@
 
 }
 
-.home-content{
+.home-mid{
   display: flex;
   flex-direction: row;
   flex: 1;
   height: 100%;
-  overflow-y: scroll;
   width: 100%;
   overflow: hidden;
-  .home-content-content{
-    display: flex;
-    flex-direction: row;
-    flex: 1;
-    height: 100%;
-    width: 100%;
-  }
 }
 
-.home-left{
+.home-mid-left{
   height: 100%;
   border-right: 1px gainsboro solid;
   /*background: white;*/
@@ -137,52 +129,61 @@
 }
 
 
-.el-tabs--border-card>.el-tabs__header .el-tabs__item.is-active{
-
-}
-
 
 .home-mid-drag{
   width: 4px;
+  background: url("../../assets/climpek.png");
   cursor:pointer;
 }
 
-.home-right{
+.home-mid-right.home-review{
   flex: 1;
   display: flex;
   flex-direction: column;
   height: 100%;
   overflow: hidden;
-}
-
-
-.home-right-bottom{
-  display: flex;
-  flex-direction: row;
-  height: 100%;
-  .home-right-markdown{
-    flex: 1;
-    overflow-y: hidden;
+  background: url("../../assets/lghtmesh.png");
+  .home-review-markdown{
     height: 100%;
-    .home-right-markdown-input{
-      height: 100%;
-      width: 100%;
-      .share{
-        padding: 3px;
-        width: 20px;
-        height: 20px;
-        position: relative;
-        top: 8px;
-        &:hover{
-          background-color: #E9E9EB;
-          border-radius: 4px;
-        }
+    width: 100%;
+    display: flex;
+    .share{
+      padding: 3px;
+      width: 20px;
+      height: 20px;
+      position: relative;
+      top: 8px;
+      &:hover{
+        background-color: #E9E9EB;
+        border-radius: 4px;
       }
     }
   }
+  .home-review-html{
+    height: 100%;
+    width: 100%;
+    display: none;
+    flex-direction: column;
+    .home-review-html-top{
+      width: 100%;
+      height: 40px;
+      input{
+        width: 100%;
+        height: 90%;
+      }
+    }
+    .home-review-html-mid{
+      height: 100%;
+      width: 100%;
+    }
+  }
+  .home-review-code{
+    display: none;
+    height: 100%;
+    width: 100%;
+  }
+
 }
-
-
 
 .home-bottom{
   height: 30px;
@@ -216,16 +217,88 @@
   margin-top: 5px;
   margin-bottom: 5px;
 }
-
-/deep/.v-note-wrapper .v-note-panel .v-note-edit.divarea-wrapper.scroll-style::-webkit-scrollbar {
-  width: 4px;
-  background-color: #e5e5e5;
+//编辑栏和预览栏
+/deep/.v-note-wrapper .v-note-panel{
+  width: calc(100% - 10px);
+}
+//编辑栏
+/deep/.v-note-wrapper .v-note-panel .v-note-edit.divarea-wrapper{
+  border-radius: 4px;
+  border: 2px gray solid;
+  width: 0;
+  flex: 1;
+  &::-webkit-scrollbar-thumb{
+    border-radius: 1px;
+    background-color: #b7b7b7;
+  }
+  &::-webkit-scrollbar{
+    width: 8px;
+  }
+  &::-webkit-scrollbar-track{
+    background-color: transparent;
+  }
+  .content-input-wrapper{
+    padding: 4px;
+    background: transparent !important;
+    .content-input{
+      background: transparent !important;
+    }
+  }
+  textarea{
+    background: transparent;
+  }
+  .auto-textarea-block{
+    background: transparent;
+  }
 }
 
-/deep/.v-note-wrapper .v-note-panel .v-note-show .v-show-content.scroll-style::-webkit-scrollbar, .v-note-wrapper .v-note-panel .v-note-show .v-show-content-html.scroll-style::-webkit-scrollbar {
-  width: 4px;
-  background-color: #e5e5e5;
+/deep/.v-note-wrapper .v-note-panel{
+  background-image: url("../../assets/noisy_grid.png") ;
 }
+
+
+//预览栏
+/deep/.v-note-wrapper .v-note-panel .v-note-show{
+  border-radius: 4px;
+  border: 2px grey solid;
+  margin: 0px 0px 0px 2px;
+  width: 0;
+  flex: 1;
+  .v-show-content{
+    padding: 0px;
+    *{
+      overflow: auto;
+      &::-webkit-scrollbar-thumb{
+        border-radius: 1px;
+        background-color: #b7b7b7;
+      }
+      &::-webkit-scrollbar{
+        height: 8px;
+      }
+      &::-webkit-scrollbar-track{
+        background-color: transparent;
+      }
+    }
+    &::-webkit-scrollbar-thumb{
+      border-radius: 1px;
+      background-color: white;
+    }
+    &::-webkit-scrollbar{
+      width: 8px;
+    }
+    &::-webkit-scrollbar-track{
+      background-color: black;
+    }
+    &>pre{
+      padding: 0px;
+      margin: 0;
+      width: auto;
+    }
+  }
+}
+
+
+
 
 /deep/ .el-tabs__header{
   margin-bottom: 0px;
@@ -257,20 +330,9 @@
   text-align: left;
   padding: 10px;
   color: white;
-
-  /deep/ &::-webkit-scrollbar{
-    height: 8px;
-  }
-
-  /deep/ &::-webkit-scrollbar-thumb{
-    border-radius: 4px;
-    background-color: darkgrey;
-  }
+  font-size: 16px;
 
 
-  /deep/ &::-webkit-scrollbar-track{
-    background-color: gainsboro;
-  }
 
   /deep/ .hljs-comment{
     color: limegreen;
@@ -295,9 +357,6 @@
 
   /deep/ .v-note-edit{
     width: 10px;
-  }
-  /deep/ .v-note-show{
-    flex: 1;
   }
 
 }

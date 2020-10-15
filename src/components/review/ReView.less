@@ -1,7 +1,6 @@
-.root{
-  height: calc(100% - 20px);
-  width: calc(100% - 20px);
-  padding: 10px;
+.review-root{
+  height: calc(100% - 0px);
+  width: calc(100% - 0px);
 }
 .contain{
   height: 100%;
@@ -11,13 +10,14 @@
 }
 .left{
   border: 1px black solid;
-  width: 200px;
+  width: 100%;
+  overflow: auto;
 }
 .mid{
   width: 0;
   border: 1px black solid;
   flex:1;
-  display: flex;
+  display: none;
   textarea{
     flex: 1;
     resize: none;
@@ -42,6 +42,7 @@
   overflow-y: auto;
   overflow-x: auto;
   .html{
+    background: #282b2e;
     width: 0;
     flex: 1;
     text-align: left;
