@@ -24,11 +24,20 @@
        },
         methods:{
             login(){
-                if(this.loginInput.name==='summer'&&this.loginInput.pwd==='summerviwox'){
-                    let o = {name:this.loginInput.name,pwd:this.loginInput.pwd,time:new Date().getTime()}
-                    localStorage.setItem('loginres',JSON.stringify(o) )
-                    this.$router.push('/home',{})
+              let o = {name:this.loginInput.name,pwd:this.loginInput.pwd,time:new Date().getTime()}
+              this.$axios.post("http://222.186.36.75:9999/record-b"+"/user/login",o).then(res=>{
+                if(res.data){
+                  localStorage.setItem('loginres',JSON.stringify(o) )
+                  localStorage.setItem("token",res.data)
+                  this.$router.push('/home',{})
+                }else{
+                  this.$message.error("登录失败")
                 }
+              }).catch(error=>{
+                  console.error(error)
+                this.$message.error("登录失败")
+              })
+
             }
         },
         mounted(){

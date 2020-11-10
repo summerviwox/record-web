@@ -14,7 +14,7 @@
     </div>
 
     <div class="home-mid">
-      <div class="home-mid-left" :style="{width:leftwidth +'px'}">
+      <div class="home-mid-left blockborder" :style="{width:leftwidth +'px'}">
 
         <el-tabs v-model="activeName" type="border-card" class="home-left-tabs" :stretch="tabstretch">
           <el-tab-pane label="目录" name = "目录">
@@ -291,7 +291,8 @@ export default {
     handleNodeClick(object,node,self){
       this.currentNode = object
       this.insertModel = false
-      this.$axios.get(this.getHttp()+'/blog/selectWithOutHtmlDataByParentId',{params:{id:object.id}}).then(res=>{
+
+      this.$Http.get(this.getHttp()+'/blog/selectWithOutHtmlDataByParentId',{params:{id:object.id}}).then(res=>{
 
         if(this.activeName==="目录"){
           this.$refs.tree.updateKeyChildren(object.id,res.data)
@@ -304,7 +305,7 @@ export default {
       })
     },
     getchildData(i){
-      this.$axios.get(this.getHttp()+'/blog/selectWithOutHtmlDataByParentId',{params:{id:i}}).then(res=>{
+      this.$Http.get(this.getHttp()+'/blog/selectWithOutHtmlDataByParentId',{params:{id:i}}).then(res=>{
         this.data = res.data
         this.currentNode = {id:0}
       }).catch(e=>{
