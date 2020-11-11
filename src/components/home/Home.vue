@@ -201,7 +201,7 @@ export default {
       }
     },
     deleltBog(){
-      this.$axios.post(this.getHttp()+'/blog/deleteByPrimaryKey',this.currentNode).then(res=>{
+      this.$Http.post(this.getHttp()+'/blog/deleteByPrimaryKey',this.currentNode).then(res=>{
         this.dialogTableVisible = false
         this.$message(res.data.data==1?"删除成功":"删除失败")
         if(res.data.data==1){
@@ -221,7 +221,7 @@ export default {
           this.$message("至少需要一些内容")
           return;
         }
-        this.$axios.post(this.getHttp()+'/blog/insert',{
+        this.$Http.post(this.getHttp()+'/blog/insert',{
           parentid:this.currentNode==null?0:this.currentNode.id,
           title:this.getFirstLineStr(this.content),
           html:this.$refs.mavon.d_render,
@@ -243,7 +243,7 @@ export default {
         if(this.currentNode==null){
           return
         }
-        this.$axios.post(this.getHttp()+'/blog/updateByPrimaryKey',{
+        this.$Http.post(this.getHttp()+'/blog/updateByPrimaryKey',{
           id:this.currentNode.id,
           parentid:this.currentNode.parentid,
           title:this.getFirstLineStr(this.content),
@@ -317,7 +317,7 @@ export default {
       // 第一步.将图片上传到服务器.
       var formdata = new FormData();
       formdata.append('file', $file);
-      this.$axios({
+      this.$Http({
         url: this.getHttp()+"/blog/upload",
         method: 'post',
         data: formdata,
@@ -351,7 +351,7 @@ export default {
     },
     //文章搜索
     articleSearch(){
-      this.$axios.post(this.getHttp()+'/blog/search',{
+      this.$Http.post(this.getHttp()+'/blog/search',{
         markdown:this.searchInput
       }).then(res=>{
         this.searchArtilces = res.data.data
@@ -362,7 +362,7 @@ export default {
     //拖拽功能
     handleDrop(draggingNode, dropNode, dropType) {
       console.log('tree drop: ',draggingNode.data, dropNode.data,dropType);
-      this.$axios.post(this.getHttp()+"/blog/updateParentIdByPrimaryKey",{
+      this.$Http.post(this.getHttp()+"/blog/updateParentIdByPrimaryKey",{
         id:draggingNode.data.id,
         parentid:(dropType==="inner")?dropNode.data.id:dropNode.data.parentid
       })

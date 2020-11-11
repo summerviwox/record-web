@@ -1,4 +1,5 @@
 import axios from 'axios'
+import router from "@/router";
 
 let instance = axios.create({
 
@@ -9,7 +10,7 @@ instance.interceptors.request.use(
         if(config.method==='get'){
             config.params['token'] = token
         }else if(config.method==='post'){
-            config.data.append('token',token)
+            config.data.token = token
         }
         return config
     },
@@ -19,6 +20,9 @@ instance.interceptors.request.use(
 )
 instance.interceptors.response.use(
     respone=>{
+        if(respone.data=='500'){
+            router.push("/login",{})
+        }
         return respone
     },
     error => {
