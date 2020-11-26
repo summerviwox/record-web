@@ -18,7 +18,7 @@
 
         <el-tabs v-model="activeName" type="border-card" class="home-left-tabs" :stretch="tabstretch">
           <el-tab-pane label="目录" name = "目录">
-            <div class="home-left-dir-content">
+            <div class="home-left-dir-content scroll">
               <el-tree
                   class="home-left-tree"
                   @node-contextmenu="nodeContextMenu"
@@ -35,7 +35,7 @@
           </el-tab-pane>
           <el-tab-pane label="搜索" class="home-left-search" name="搜索">
             <el-input v-model="searchInput" placeholder="请输入内容" @keyup.enter.native="articleSearch($event)" class="home-left-search-input" size="small" suffix-icon="el-icon-search"></el-input>
-            <div class="home-left-search-articles">
+            <div class="home-left-search-articles scroll">
               <el-tree
                   class="home-left-tree"
                   @node-contextmenu="nodeContextMenu"
@@ -351,6 +351,10 @@ export default {
     },
     //文章搜索
     articleSearch(){
+      if(this.searchInput==''){
+        this.$message.warning("请输入搜索内容")
+        return
+      }
       this.$Http.post(this.getHttp()+'/blog/search',{
         markdown:this.searchInput
       }).then(res=>{
