@@ -60,7 +60,9 @@
             <div style="display: inline-flex;height: 30px;flex-direction: column">
               <img class="share" src="../../assets/share.png" title="分享" @click="share" />
             </div>
-            <el-slider @input="slderchange" class="slider" v-model="slidervalue"></el-slider>
+            <el-slider @input="slderchange" class="slider" :step="10" v-model="slidervalue"></el-slider>
+
+            <div class="reset" @click="sliderReset">重置</div>
           </template>
         </mavon-editor>
         <div class="home-review-html">
@@ -384,6 +386,9 @@ export default {
     slderchange(v){
       this.$refs.mavon.$el.getElementsByClassName("v-note-edit divarea-wrapper transition")[0].style.flex  = v
       this.$refs.mavon.$el.getElementsByClassName("v-note-show")[0].style.flex  =100- v
+    },
+    sliderReset(){
+      this.slidervalue = 50
     }
   },
 
