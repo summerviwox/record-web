@@ -60,6 +60,7 @@
             <div style="display: inline-flex;height: 30px;flex-direction: column">
               <img class="share" src="../../assets/share.png" title="分享" @click="share" />
             </div>
+            <el-slider @input="slderchange" class="slider" v-model="slidervalue"></el-slider>
           </template>
         </mavon-editor>
         <div class="home-review-html">
@@ -110,6 +111,7 @@ export default {
   },
   data() {
     return {
+      slidervalue:50,
       reviewhtml:'http://www.baidu.com',
       scrollStyle:false,
       code_style:'dracula',
@@ -204,7 +206,7 @@ export default {
     deleltBog(){
       this.$Http.post(this.getHttp()+'/blog/deleteByPrimaryKey',this.currentNode).then(res=>{
         this.dialogTableVisible = false
-        this.$message(res.data.data==1?"删除成功":"删除失败")
+        this.$message({message:res.data.data==1?"删除成功":"删除失败",duration:1000})
         if(res.data.data==1){
           this.$refs.tree.remove(this.currentNode)
         }else{
@@ -231,7 +233,7 @@ export default {
           utime:new Date().getTime(),
           type:0
         }).then(res=>{
-          this.$message(res.data.data.id!=0?"新增成功":"新增失败")
+          this.$message({message:res.data.data.id!=0?"新增成功":"新增失败",duration:1000})
           if(res.data.data.id!=0){
             this.$refs.tree.append(res.data.data,this.currentNode.id)//res.data.data 已关联data
             this.currentNode = res.data.data
@@ -255,7 +257,7 @@ export default {
           type:0
         }).then(res=>{
           this.$message('这是一条消息提示');
-          this.$message(res.data==1?"更新成功":"更新失败"+res.data)
+          this.$message({message:res.data==1?"更新成功":"更新失败"+res.data,duration:1000})
           if(res.data==1){
             this.currentNode.markdown = this.content
           }
@@ -378,6 +380,11 @@ export default {
             this.$message(e)
           })
     },
+    //滑动改变编辑栏和预览栏比例
+    slderchange(v){
+      this.$refs.mavon.$el.getElementsByClassName("v-note-edit divarea-wrapper transition")[0].style.flex  = v
+      this.$refs.mavon.$el.getElementsByClassName("v-note-show")[0].style.flex  =100- v
+    }
   },
 
   mounted() {
