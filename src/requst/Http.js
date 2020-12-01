@@ -21,6 +21,7 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
     respone=>{
         if(respone.data=='500'){
+            localStorage.setItem('loginres','')
             router.push("/login",{})
         }
         return respone

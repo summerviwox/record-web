@@ -114,7 +114,7 @@ export default {
       scrollStyle:false,
       code_style:'dracula',
       tabstretch:true,
-      activeName:"搜索",
+      activeName:"目录",
       searchArtilces:[],
       searchInput:"",
       avatar:'http://222.186.36.75:8888/blog/13.png',
@@ -193,6 +193,7 @@ export default {
         case "3"://退出登录
           localStorage.removeItem('loginres')
           this.$route.meta.keepAlive = false
+          localStorage.setItem('loginres','')
           this.$router.push('/login',{})
           break
         case "4":
@@ -387,7 +388,7 @@ export default {
       this.$route.meta.keepAlive = true
       this.getchildData(0)
     }
-  }
+  },
 };
 </script>
 

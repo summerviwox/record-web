@@ -12,21 +12,21 @@ const router = new VueRouter({
             path:'/',
             component: Home,
             meta:{
-                keepAlive:true
+                keepAlive:false
             }
         },
         {
             path:'/login',
             component:Login,
             meta:{
-                keepAlive:true
+                keepAlive:false
             }
         },
         {
             path:'/home',
             component:Home,
             meta:{
-                keepAlive:true
+                keepAlive:false
             }
         },
         {

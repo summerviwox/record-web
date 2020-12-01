@@ -11,6 +11,8 @@
 </template>
 
 <script>
+    import userDE from "@/logic/UserDE";
+
     export default {
         name: "Login",
        data(){
@@ -41,7 +43,11 @@
             }
         },
         mounted(){
-            console("12")
+          if(userDE.isLogined()){
+            this.$route.meta.keepAlive = false
+            this.$router.push('/login',{});
+            this.$router.push({path:'/home',query:''})
+          }
         }
     }
 </script>
