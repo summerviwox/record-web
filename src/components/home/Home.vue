@@ -62,7 +62,7 @@
             </div>
             <el-slider @input="slderchange" class="slider" :step="10" v-model="slidervalue"></el-slider>
 
-            <div class="reset" @click="sliderReset">重置</div>
+            <img src="../../assets/reset.png" class="reset" @click="sliderReset"/>
           </template>
           <template v-slot:right-toolbar-before>
             <el-switch
@@ -121,6 +121,7 @@ export default {
   },
   data() {
     return {
+      reseturl:require('@/assets/reset.png'),
       visible:{
         blogDirs:true,
         dragArea:true,
