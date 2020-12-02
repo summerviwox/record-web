@@ -14,7 +14,7 @@
     </div>
 
     <div class="home-mid">
-      <div class="home-mid-left blockborder" :style="{width:leftwidth +'px'}">
+      <div class="home-mid-left blockborder"  v-if="visible.blogDirs" ref="homemidleft" :style="{width:leftwidth +'px'}">
 
         <el-tabs v-model="activeName" type="border-card" class="home-left-tabs" :stretch="tabstretch">
           <el-tab-pane label="目录" name = "目录">
@@ -53,7 +53,7 @@
           </el-tab-pane>
         </el-tabs>
       </div>
-      <div class="home-mid-drag"   @mousedown="dragOnMouseDown($event)"></div>
+      <div class="home-mid-drag"  ref="homemiddrag" v-if="visible.dragArea"  @mousedown="dragOnMouseDown($event)"></div>
       <div class="home-mid-right home-review">
         <mavon-editor class="home-review-markdown" :scrollStyle="scrollStyle" :code_style="code_style" v-model="content" ref="mavon" @imgAdd="$imgAdd" @save="save" >
           <template v-slot:left-toolbar-after v-if="this.currentNode">
@@ -63,6 +63,14 @@
             <el-slider @input="slderchange" class="slider" :step="10" v-model="slidervalue"></el-slider>
 
             <div class="reset" @click="sliderReset">重置</div>
+          </template>
+          <template v-slot:right-toolbar-before>
+            <el-switch
+                @change="lefttreeSwitchChangeMethod"
+                v-model="lefttreeSwitchValue"
+                active-color="#409EFF"
+                inactive-color="gray">
+            </el-switch>
           </template>
         </mavon-editor>
         <div class="home-review-html">
@@ -113,6 +121,11 @@ export default {
   },
   data() {
     return {
+      visible:{
+        blogDirs:true,
+        dragArea:true,
+      },
+      lefttreeSwitchValue:true,
       slidervalue:50,
       reviewhtml:'http://www.baidu.com',
       scrollStyle:false,
@@ -258,7 +271,6 @@ export default {
           utime:new Date().getTime(),
           type:0
         }).then(res=>{
-          this.$message('这是一条消息提示');
           this.$message({message:res.data==1?"更新成功":"更新失败"+res.data,duration:1000})
           if(res.data==1){
             this.currentNode.markdown = this.content
@@ -389,7 +401,12 @@ export default {
     },
     sliderReset(){
       this.slidervalue = 50
-    }
+    },
+    // eslint-disable-next-line no-unused-vars
+    lefttreeSwitchChangeMethod(is){
+        this.visible.dragArea = is
+        this.visible.blogDirs = is
+    },
   },
 
   mounted() {
