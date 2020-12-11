@@ -64,7 +64,7 @@
 
             <img src="../../assets/reset.png" class="reset" @click="sliderReset"/>
           </template>
-          <template v-slot:right-toolbar-before>
+          <template v-slot:left-toolbar-before>
             <el-switch
                 @change="lefttreeSwitchChangeMethod"
                 v-model="lefttreeSwitchValue"
@@ -86,7 +86,6 @@
     <div class="home-bottom">
       <div class="home-top-content">
         <div class="home-top-left">
-
         </div>
         <div class="home-top-right">
           <el-dropdown @command="dropdownMenu">
