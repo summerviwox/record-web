@@ -17,7 +17,7 @@
         name: "Login",
        data(){
             return{
-                head:"http://222.186.36.75:8888/blog/13.png",
+                head:"https://222.186.36.75:8888/blog/13.png",
                 loginInput:{
                     name:"summer",
                     pwd:"123456"
@@ -27,7 +27,7 @@
         methods:{
             login(){
               let o = {name:this.loginInput.name,pwd:this.loginInput.pwd,time:new Date().getTime()}
-              this.$axios.post("http://222.186.36.75:9999/record-b"+"/user/login",o).then(res=>{
+              this.$axios.post("https://222.186.36.75:9999/record-b"+"/user/login",o).then(res=>{
                 if(res.data){
                   localStorage.setItem('loginres',JSON.stringify(o) )
                   localStorage.setItem("token",res.data)

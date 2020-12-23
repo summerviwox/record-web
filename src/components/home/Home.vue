@@ -135,7 +135,7 @@ export default {
       searchArtilces:[],
       searchInput:"",
       avatar:'http://222.186.36.75:8888/blog/13.png',
-      http:"http://222.186.36.75:9999/record-b",
+      http:"https://222.186.36.75:9999/record-b",
       insertModel:true,//新增还是更新
       editableTabsValue: '2',
       tabList:[],
