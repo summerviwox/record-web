@@ -338,6 +338,7 @@ export default {
         url: this.getHttp()+"/blog/upload",
         method: 'post',
         data: formdata,
+        accept: "file",
         headers: { 'Content-Type': 'multipart/form-data' },
       }).then((url) => {
         // 第二步.将返回的url替换到文本原位置![...](0) -> ![...](url)

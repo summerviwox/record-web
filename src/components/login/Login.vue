@@ -17,7 +17,7 @@
         name: "Login",
        data(){
             return{
-                head:"https://222.186.36.75:8888/blog/13.png",
+                head:"http://222.186.36.75:8888/blog/13.png",
                 loginInput:{
                     name:"summer",
                     pwd:"123456"

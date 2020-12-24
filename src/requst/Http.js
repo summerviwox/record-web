@@ -7,11 +7,13 @@ let instance = axios.create({
 instance.interceptors.request.use(
     config=>{
         const token = localStorage.getItem("token")
-        if(config.method==='get'){
-            config.params['token'] = token
-        }else if(config.method==='post'){
-            config.data.token = token
+        if(token){
+            if(config.method.trim()=='get'){
+                config.params.token = token
+            }
+            config.headers["token"] = token
         }
+        console.error(config)
         return config
     },
     error => {
