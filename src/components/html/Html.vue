@@ -14,7 +14,7 @@ export default {
       content:"",
       html:'',
       id:-1,
-      http:"https://222.186.36.75:9999/record-b",
+      http:"https://www.summerman.top:9999/record-b",
     }
   },
   methods:{

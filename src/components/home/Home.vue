@@ -135,7 +135,7 @@ export default {
       searchArtilces:[],
       searchInput:"",
       avatar:'http://222.186.36.75:8888/blog/13.png',
-      http:"https://222.186.36.75:9999/record-b",
+      http:"https://www.summerman.top:9999/record-b",
       insertModel:true,//新增还是更新
       editableTabsValue: '2',
       tabList:[],
@@ -310,7 +310,7 @@ export default {
       this.insertModel = false
 
       this.$Http.get(this.getHttp()+'/blog/selectWithOutHtmlDataByParentId',{params:{id:object.id}}).then(res=>{
-
+        this.toHttps(res.data)
         if(this.activeName==="目录"){
           this.$refs.tree.updateKeyChildren(object.id,res.data)
         }else{
@@ -323,6 +323,7 @@ export default {
     },
     getchildData(i){
       this.$Http.get(this.getHttp()+'/blog/selectWithOutHtmlDataByParentId',{params:{id:i}}).then(res=>{
+        this.toHttps(res.data)
         this.data = res.data
         this.currentNode = {id:0}
       }).catch(e=>{
@@ -408,6 +409,11 @@ export default {
         this.visible.dragArea = is
         this.visible.blogDirs = is
     },
+    toHttps(data){
+      for(let i=0;i<data.length;i++){
+        data[i].markdown = data[i].markdown.replace("http://222.186.36.75:8888","https://www.summerman.top:7777")
+      }
+    }
   },
 
   mounted() {
