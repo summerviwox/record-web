@@ -135,7 +135,7 @@ export default {
       searchArtilces:[],
       searchInput:"",
       avatar:'http://222.186.36.75:8888/blog/13.png',
-      http:"https://www.summerman.top:9999/record-b",
+      http:"https://www.summerviwox.com/record-b",
       insertModel:true,//新增还是更新
       editableTabsValue: '2',
       tabList:[],
@@ -412,6 +412,7 @@ export default {
     toHttps(data){
       for(let i=0;i<data.length;i++){
         data[i].markdown = data[i].markdown.replace("http://222.186.36.75:8888","https://www.summerman.top:7777")
+        data[i].markdown = data[i].markdown.replace("https://www.summerman.top:7777","https://www.summerviwox.com")
       }
     }
   },

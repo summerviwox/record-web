@@ -17,7 +17,7 @@
         name: "Login",
        data(){
             return{
-              http:"https://www.summerman.top:9999/record-b",
+              http:"https://www.summerviwox.com/record-b",
                 head:"http://www.summerman.top:8888/blog/13.png",
                 loginInput:{
                     name:"summer",
