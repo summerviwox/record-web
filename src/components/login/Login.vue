@@ -18,7 +18,7 @@
        data(){
             return{
               http:"https://www.summerviwox.com/record-b",
-                head:"http://www.summerman.top:8888/blog/13.png",
+                head:"https://www.summerviwox.com/blog/13.png",
                 loginInput:{
                     name:"summer",
                     pwd:"123456"
